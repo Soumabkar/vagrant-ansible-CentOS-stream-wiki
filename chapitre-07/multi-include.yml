@@ -1,0 +1,9 @@
+---
+
+- include_tasks: "install-apache.yml"
+  vars:
+    nom_inventaire: "recette"
+
+- include_tasks: "install-apache.yml"
+  vars:
+    nom_inventaire: "production"

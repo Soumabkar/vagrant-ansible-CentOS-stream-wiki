@@ -1,0 +1,11 @@
+all:
+  hosts:
+    master:
+      ansible_user: vagrant
+      ansible_password: vagrant
+      ansible_connection: ssh  # Optionnel, si vous utilisez SSH
+
+    worker:
+      ansible_user: vagrant
+      ansible_password: vagrant
+      ansible_connection: ssh  # Optionnel, si vous utilisez SSH

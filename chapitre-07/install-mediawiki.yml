@@ -1,0 +1,17 @@
+---
+
+- name: "MediaWiki db configuration"
+  hosts: apache
+  gather_facts: yes
+  gather_subset: "network"
+  tags: [ "mariadb", "mysql" ]
+  roles:
+    - role: "mediawiki/mariadb"
+      delegate_to: "{{ groups.mysql.0 }}"
+
+- name: "MediaWiki apache configuration"
+  hosts: apache
+  tags: "apache"
+  gather_facts: no
+  roles:
+    - role: "mediawiki/configuration"

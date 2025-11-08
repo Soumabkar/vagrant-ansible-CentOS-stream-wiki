@@ -1,0 +1,32 @@
+---
+
+- name: "Apache installation"
+  hosts: inventory
+  handlers:
+    - name: "Apache restart"
+      service:
+        name: "httpd"
+        state: "restarted"
+  tasks:
+    - name: "Apache package installation"
+      yum:
+        name: "httpd"
+        state: "present"
+    - name: "Apache configuration"
+      template:
+        src: "inventory.conf.j2"
+        dest: "/etc/httpd/conf.d/inventory.conf"
+        owner: "apache"
+        group: "apache"
+      # Notify Apache restart handler
+      notify: [ "Apache restart" ]
+    - name: "Allow http connections"
+      firewalld:
+        service: "http"
+        permanent: yes
+        state: enabled
+    - name: "Start apache service"
+      service:
+        name: "httpd"
+        state: "started"
+        enabled: yes

@@ -1,0 +1,26 @@
+---
+
+- name: "mariadb-server installation"
+  dnf:
+    name:  "mariadb-server,python3-PyMySQL"
+    state: "installed"
+
+- name: "start mariadb service"
+  service:
+    name:  "mariadb"
+    state: "started"
+    enabled: yes
+
+- name: "Allow mariadb connections"
+  firewalld:
+    service: "mysql"
+    permanent: yes
+    state: enabled
+
+- name: "Listen on all interfaces"
+  lineinfile:
+    path: "/etc/my.cnf.d/mariadb-server.cnf"
+    line: "bind-address=*"
+    insertafter: "[galera]"
+    regexp: "bind-address"
+  notify: ["mariadb restart"]
