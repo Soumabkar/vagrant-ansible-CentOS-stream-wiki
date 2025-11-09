@@ -44,11 +44,11 @@ Vagrant.configure("2") do |config|
     master.vm.provision "file", source: "playbooks/roles/apache-inventory/tasks/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/apache-inventory/tasks/main.yml"
     master.vm.provision "file", source: "playbooks/roles/apache-inventory/templates/inventaire.conf.j2", destination: "/home/vagrant/ansible/playbooks/roles/apache-inventory/templates/inventaire.conf.j2"
 
-    
+
     master.vm.provision "file", source: "playbooks/roles/mariadb/handlers/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/mariadb/handlers/main.yml"
     master.vm.provision "file", source: "playbooks/roles/mariadb/tasks/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/mariadb/tasks/main.yml"
 
-
+ 
     master.vm.provision "file", source: "playbooks/roles/mediawiki/common/defaults/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/mediawiki/common/defaults/main.yml"
     master.vm.provision "file", source: "playbooks/roles/mediawiki/configuration/defaults/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/mediawiki/configuration/defaults/main.yml"
     master.vm.provision "file", source: "playbooks/roles/mediawiki/configuration/meta/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/mediawiki/configuration/meta/main.yml"
