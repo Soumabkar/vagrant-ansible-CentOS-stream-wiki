@@ -1,5 +1,8 @@
 Vagrant.configure("2") do |config|
 
+  config.vbguest.auto_update = false
+
+
   config.vm.define "master" do |master|
 
     master.vm.box = "generic/centos9s"
@@ -10,10 +13,54 @@ Vagrant.configure("2") do |config|
     end
 
     master.vm.provision "shell", path: "provision_master.sh"
+
+
     master.vm.provision "file", source: "install-apache-restart-by-handler.yml", destination: "/home/vagrant/ansible/install-apache-restart-by-handler.yml"
     master.vm.provision "file", source: "inventaire-apache.yml", destination: "/home/vagrant/ansible/inventaire-apache.yml"
+    master.vm.provision "file", source: "inventory.conf.j2", destination: "/home/vagrant/ansible/inventory.conf.j2" 
+
+
+    master.vm.provision "file", source: "install-apache.yml", destination: "/home/vagrant/ansible/playbooks/install-apache.yml"
+    master.vm.provision "file", source: "install-inventaire.yml", destination: "/home/vagrant/ansible/playbooks/install-inventaire.yml"
+    master.vm.provision "file", source: "install-mariadb.yml", destination: "/home/vagrant/ansible/playbooks/install-mariadb.yml"
+    master.vm.provision "file", source: "install-mediawiki.yml", destination: "/home/vagrant/ansible/playbooks/install-mediawiki.yml"
+    master.vm.provision "file", source: "inventaire-apache.yml", destination: "/home/vagrant/ansible/playbooks/inventaire-apache.yml"
+    master.vm.provision "file", source: "inventaire.yml", destination: "/home/vagrant/ansible/playbooks/inventaire.yml"
+    master.vm.provision "file", source: "machine.html.j2", destination: "/home/vagrant/ansible/playbooks/machine.html.j2"
+    master.vm.provision "file", source: "multi-conf-apache.yml", destination: "/home/vagrant/ansible/playbooks/multi-conf-apache.yml"
+    master.vm.provision "file", source: "multi-include.yml", destination: "/home/vagrant/ansible/playbooks/multi-include.yml"
+    master.vm.provision "file", source: "wiki.yml", destination: "/home/vagrant/ansible/playbooks/wiki.yml"
+
+
+    master.vm.provision "file", source: "playbooks/roles/apache/defaults/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/apache/defaults/main.yml"
+    master.vm.provision "file", source: "playbooks/roles/apache/handlers/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/apache/handlers/main.yml"
+    master.vm.provision "file", source: "playbooks/roles/apache/tasks/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/apache/tasks/main.yml"
+    master.vm.provision "file", source: "playbooks/roles/apache/tasks/php-install.yml", destination: "/home/vagrant/ansible/playbooks/roles/apache/tasks/php-install.yml"
+    master.vm.provision "file", source: "playbooks/roles/apache/vars/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/apache/vars/main.yml"
+
+
+    master.vm.provision "file", source: "playbooks/roles/apache-inventory/defaults/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/apache-inventory/defaults/main.yml"
+    master.vm.provision "file", source: "playbooks/roles/apache-inventory/meta/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/apache-inventory/meta/main.yml"
+    master.vm.provision "file", source: "playbooks/roles/apache-inventory/tasks/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/apache-inventory/tasks/main.yml"
+    master.vm.provision "file", source: "playbooks/roles/apache-inventory/templates/inventaire.conf.j2", destination: "/home/vagrant/ansible/playbooks/roles/apache-inventory/templates/inventaire.conf.j2"
+
+    
+    master.vm.provision "file", source: "playbooks/roles/mariadb/handlers/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/mariadb/handlers/main.yml"
+    master.vm.provision "file", source: "playbooks/roles/mariadb/tasks/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/mariadb/tasks/main.yml"
+
+
+    master.vm.provision "file", source: "playbooks/roles/mediawiki/common/defaults/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/mediawiki/common/defaults/main.yml"
+    master.vm.provision "file", source: "playbooks/roles/mediawiki/configuration/defaults/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/mediawiki/configuration/defaults/main.yml"
+    master.vm.provision "file", source: "playbooks/roles/mediawiki/configuration/meta/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/mediawiki/configuration/meta/main.yml"
+
+    master.vm.provision "file", source: "playbooks/roles/mediawiki/tasks/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/mediawiki/tasks/main.yml"
+
+    master.vm.provision "file", source: "playbooks/roles/mediawiki/mariadb/meta/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/mediawiki/mariadb/meta/main.yml"
+    master.vm.provision "file", source: "playbooks/roles/mediawiki/tasks/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/mediawiki/tasks/main.yml"
+    master.vm.provision "file", source: "playbooks/roles/mediawiki/vars/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/mediawiki/vars/main.yml"
+
     master.vm.provision "shell", inline: <<-SHELL
-        sudo echo "192.168.56.11	worker" | sudo tee -a /etc/hosts
+        sudo echo "192.168.56.11	worker" | sudo tee -a /etc/hosts 
     SHELL
 
   end

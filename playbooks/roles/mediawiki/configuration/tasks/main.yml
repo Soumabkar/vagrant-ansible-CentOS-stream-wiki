@@ -1,0 +1,42 @@
+---
+
+- name: "mediawiki directory"
+  file:
+    path: "{{ mediawiki_directory }}"
+    owner: "apache"
+    group: "apache"
+    state: directory
+
+- name: "uncompress mediawiki archive"
+  unarchive:
+    src: "{{ mediawiki_archive_url }}"
+    dest: "{{ mediawiki_directory }}"
+    owner: "apache"
+    group: "apache"
+    remote_src: yes
+    setype: httpd_sys_content_t
+    # remove mediawiki-xx.x/ from path
+    extra_opts: --transform=s/^mediawiki-[0-9\.]*\///
+
+- name: "mediawiki configuration"
+  become: yes
+  become_user: "apache"
+  environment:
+    LC_ALL: C
+  args:
+    creates: "{{ mediawiki_directory }}/LocalSettings.php"
+    chdir: "{{ mediawiki_maintenance_directory }}"
+  command:
+    php82 install.php --scriptpath /{{ mediawiki_name }}
+       --dbname mediawiki --lang fr
+       --dbuser {{ mediawiki_db_user }}
+       --dbpass {{ mediawiki_db_password }}
+       --pass {{ mediawiki_admin_password }}
+       --dbserver {{ mediawiki_db_host }}
+       {{ mediawiki_title }} {{ mediawiki_admin_user }}
+
+- name: "fix mediawiki redirection"
+  lineinfile:
+    path: "{{ mediawiki_directory }}/LocalSettings.php"
+    regex: '\$wgServer.*'
+    line: '$wgServer = WebRequest::detectServer();'
