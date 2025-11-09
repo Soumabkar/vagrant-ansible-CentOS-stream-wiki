@@ -57,7 +57,6 @@ Vagrant.configure("2") do |config|
 
     master.vm.provision "file", source: "playbooks/roles/mediawiki/mariadb/meta/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/mediawiki/mariadb/meta/main.yml"
     master.vm.provision "file", source: "playbooks/roles/mediawiki/tasks/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/mediawiki/tasks/main.yml"
-    master.vm.provision "file", source: "playbooks/roles/mediawiki/vars/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/mediawiki/vars/main.yml"
 
     master.vm.provision "shell", inline: <<-SHELL
         sudo echo "192.168.56.11	worker" | sudo tee -a /etc/hosts 
