@@ -1,0 +1,10 @@
+---
+
+- name: "Installation Apache"
+  hosts: inventaire
+  become: yes # Pour exécuter les tâches avec des privilèges élevés
+  roles:
+    - role: "apache"
+      nom_inventaire: "recette"
+    - role: "apache"
+      nom_inventaire: "production"

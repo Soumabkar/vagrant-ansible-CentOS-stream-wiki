@@ -1,0 +1,9 @@
+apache:
+  hosts:
+    192.168.56.12: {}  #192.168.56.12 apache1
+  vars:
+    php_install: yes
+
+mysql:
+  hosts:
+    192.168.56.13: {}  #192.168.56.13 mysql1

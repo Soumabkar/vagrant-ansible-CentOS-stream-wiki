@@ -11,5 +11,5 @@
     name:     "{{ mediawiki_db_user }}"
     password: "{{ mediawiki_db_password }}"
     priv:     "{{ mediawiki_db_name }}.*:ALL"
-    host:     "{{ ansible_default_ipv4.address }}"
+    host:     "192.168.56.13" #"{{ ansible_default_ipv4.address }}"
     state:    present

@@ -30,6 +30,7 @@ Vagrant.configure("2") do |config|
     master.vm.provision "file", source: "multi-conf-apache.yml", destination: "/home/vagrant/ansible/playbooks/multi-conf-apache.yml"
     master.vm.provision "file", source: "multi-include.yml", destination: "/home/vagrant/ansible/playbooks/multi-include.yml"
     master.vm.provision "file", source: "wiki.yml", destination: "/home/vagrant/ansible/playbooks/wiki.yml"
+    master.vm.provision "file", source: "set-seboolean.yml", destination: "/home/vagrant/ansible/playbooks/set-seboolean.yml"
 
 
     master.vm.provision "file", source: "playbooks/roles/apache/defaults/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/apache/defaults/main.yml"
@@ -53,13 +54,13 @@ Vagrant.configure("2") do |config|
     master.vm.provision "file", source: "playbooks/roles/mediawiki/configuration/defaults/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/mediawiki/configuration/defaults/main.yml"
     master.vm.provision "file", source: "playbooks/roles/mediawiki/configuration/meta/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/mediawiki/configuration/meta/main.yml"
 
-    master.vm.provision "file", source: "playbooks/roles/mediawiki/tasks/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/mediawiki/tasks/main.yml"
 
     master.vm.provision "file", source: "playbooks/roles/mediawiki/mariadb/meta/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/mediawiki/mariadb/meta/main.yml"
-    master.vm.provision "file", source: "playbooks/roles/mediawiki/tasks/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/mediawiki/tasks/main.yml"
+    master.vm.provision "file", source: "playbooks/roles/mediawiki/mariadb/tasks/main.yml", destination: "/home/vagrant/ansible/playbooks/roles/mediawiki/mariadb/tasks/main.yml"
+
 
     master.vm.provision "shell", inline: <<-SHELL
-        sudo echo "192.168.56.11	worker" | sudo tee -a /etc/hosts 
+        sudo echo "192.168.56.11	worker" | sudo tee -a /etc/hosts  
     SHELL
 
   end
@@ -76,6 +77,36 @@ Vagrant.configure("2") do |config|
     worker.vm.provision "file", source: "master_id_rsa.pub", destination: "/home/vagrant/ansible/master_id_rsa.pub"
     worker.vm.provision "shell", path: "add_master_key_to_node_authorized_keys.sh"
     worker.vm.provision "shell", path: "configure_sshd.sh"
+
+  end
+
+config.vm.define "apache1" do |apache1|
+
+    apache1.vm.box = "generic/centos9s"
+    apache1.vm.network "private_network", ip: "192.168.56.12"
+
+    apache1.vm.provider "virtualbox" do |vb|
+      vb.memory = "2048"  # Allouer 2 Go de RAM
+    end
+
+    apache1.vm.provision "file", source: "master_id_rsa.pub", destination: "/home/vagrant/ansible/master_id_rsa.pub"
+    apache1.vm.provision "shell", path: "add_master_key_to_node_authorized_keys.sh"
+    apache1.vm.provision "shell", path: "configure_sshd.sh"
+
+  end
+
+config.vm.define "mysql1" do |mysql1|
+
+    mysql1.vm.box = "generic/centos9s"
+    mysql1.vm.network "private_network", ip: "192.168.56.13"
+
+    mysql1.vm.provider "virtualbox" do |vb|
+      vb.memory = "2048"  # Allouer 2 Go de RAM
+    end
+
+    mysql1.vm.provision "file", source: "master_id_rsa.pub", destination: "/home/vagrant/ansible/master_id_rsa.pub"
+    mysql1.vm.provision "shell", path: "add_master_key_to_node_authorized_keys.sh"
+    mysql1.vm.provision "shell", path: "configure_sshd.sh"
 
   end
 

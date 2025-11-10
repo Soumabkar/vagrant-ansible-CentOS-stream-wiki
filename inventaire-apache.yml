@@ -1,6 +1,3 @@
-all:
+inventory:
   hosts:
-    192.168.56.11:
-      ansible_user: vagrant
-      ansible_password: vagrant
-      ansible_connection: ssh  # Optionnel, si vous utilisez SSH
+    192.168.56.11: {}

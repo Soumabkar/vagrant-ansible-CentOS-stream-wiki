@@ -1,0 +1,10 @@
+---
+- name: "Configurer SELinux pour Apache"
+  hosts: mysql
+  become: yes
+  tasks:
+    - name: "Autoriser Apache à se connecter à la base de données"
+      seboolean:
+        name: httpd_can_network_connect_db
+        state: yes
+        persistent: yes

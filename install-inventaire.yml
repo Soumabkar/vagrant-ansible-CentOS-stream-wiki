@@ -1,0 +1,8 @@
+---
+
+- name: "Apache installation for inventory"
+  hosts: inventory
+  become: yes # Pour exécuter les tâches avec des privilèges élevés
+  roles:
+    - role: "apache"
+    - role: "apache-inventory"
